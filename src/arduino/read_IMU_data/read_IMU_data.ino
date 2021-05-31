@@ -6,6 +6,37 @@
 
 Adafruit_MPU6050 mpu;
 
+double x_angle;
+double y_angle;
+double z_angle;
+double g = 8.81;
+
+
+
+long calc_x_angle(double accel_x){
+  double result;
+
+  result = asin(accel_x / g) * (180 / 3.1415);
+  
+  return result;
+}
+
+long calc_y_angle(double accel_y){
+  double result;
+
+  result = asin(accel_y / g) * (180 / 3.1415);
+  
+  return result;
+}
+
+long calc_z_angle(double accel_z){
+  double result;
+
+  result = acos(accel_z / g) * (180 / 3.1415);
+  
+  return result;
+}
+
 void setup(void) {
   Serial.begin(115200);
   while (!Serial)
@@ -90,6 +121,9 @@ void loop() {
   /* Get new sensor events with the readings */
   sensors_event_t a, g, temp;
   mpu.getEvent(&a, &g, &temp);
+  x_angle = calc_x_angle(a.acceleration.x);
+  y_angle = calc_x_angle(a.acceleration.y);
+  z_angle = calc_x_angle(a.acceleration.z);
 
   /* Print out the values */
   Serial.print("Acceleration X: ");
@@ -98,21 +132,30 @@ void loop() {
   Serial.print(a.acceleration.y);
   Serial.print(", Z: ");
   Serial.print(a.acceleration.z);
-  Serial.println(" m/s^2");
+  Serial.print(" m/s^2");
 
-  Serial.print("Rotation X: ");
-  Serial.print(g.gyro.x);
-  Serial.print(", Y: ");
-  Serial.print(g.gyro.y);
-  Serial.print(", Z: ");
-  Serial.print(g.gyro.z);
-  Serial.println(" rad/s");
+  Serial.print("x angle: ");
+  Serial.print(x_angle);
+  Serial.print("  y angle: ");
+  Serial.print(y_angle);
+  Serial.print("  z angle: ");
+  Serial.println(z_angle);
+  
+  
 
-  Serial.print("Temperature: ");
-  Serial.print(temp.temperature);
-  Serial.println(" degC");
+//  Serial.print("Rotation X: ");
+//  Serial.print(g.gyro.x);
+//  Serial.print(", Y: ");
+//  Serial.print(g.gyro.y);
+//  Serial.print(", Z: ");
+//  Serial.print(g.gyro.z);
+//  Serial.println(" rad/s");
+//  
+//  Serial.print("Temperature: ");
+//  Serial.print(temp.temperature);
+//  Serial.println(" degC");
 
-  Serial.println("");
+//  Serial.println("");
 
-  delay(500);
+  delay(100);
 }
