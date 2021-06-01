@@ -9,7 +9,7 @@ Adafruit_MPU6050 mpu;
 double x_angle;
 double y_angle;
 double z_angle;
-double g = 8.81;
+double g = 9.81;
 
 
 
@@ -122,8 +122,8 @@ void loop() {
   sensors_event_t a, g, temp;
   mpu.getEvent(&a, &g, &temp);
   x_angle = calc_x_angle(a.acceleration.x);
-  y_angle = calc_x_angle(a.acceleration.y);
-  z_angle = calc_x_angle(a.acceleration.z);
+  y_angle = calc_y_angle(a.acceleration.y);
+  z_angle = calc_z_angle(a.acceleration.z);
 
   /* Print out the values */
   Serial.print("Acceleration X: ");
