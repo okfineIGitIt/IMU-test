@@ -9,6 +9,10 @@ from matplotlib.figure import Figure
 
 class GenericFrame(ABC):
 
+    def __init__(self, frame, *args, **kwargs):
+        self.frame = frame
+        super().__init__()
+
     def configure_ui(self):
         pass
 
@@ -17,7 +21,7 @@ class ControlFrame(GenericFrame):
     """Frame with interactive elements to control aspects of the GUI"""
 
     def __init__(self, frame):
-        self.frame = frame
+        super().__init__(frame)
         self.configure_ui()
 
     def configure_ui(self):
@@ -32,9 +36,7 @@ class GraphFrame(GenericFrame):
     """Frame with graph displaying IMU readings"""
 
     def __init__(self, frame, window):
-        # self.x = []
-        # self.y = []
-        self.frame = frame
+        super().__init__(frame)
         self.window = window
 
         # making figure with data
@@ -50,13 +52,16 @@ class GraphFrame(GenericFrame):
         self.toolbar.update()
         self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
-        def on_key_press(event):
-            print("you pressed {}".format(event.key))
-            key_press_handler(event, self.canvas, self.toolbar)
-
-        self.canvas.mpl_connect("key_press_event", on_key_press)
+        self.canvas.mpl_connect("key_press_event", self.on_key_press)
 
         self._update_tkinter_app()
+
+    def configure_ui(self):
+        pass
+
+    def on_key_press(self, event):
+        print("you pressed {}".format(event.key))
+        key_press_handler(event, self.canvas, self.toolbar)
 
     def _update_tkinter_app(self):
         self.window.update_idletasks()
@@ -67,7 +72,7 @@ class RenderFrame(GenericFrame):
     """Frame with 3d render if current IMU orientation"""
 
     def __init__(self, frame):
-        self.frame = frame
+        super().__init__(frame)
         self.configure_ui()
 
     def configure_ui(self):
@@ -80,7 +85,7 @@ class MonitorFrame(GenericFrame):
     """Frame with serial monitor output from IMU"""
 
     def __init__(self, frame):
-        self.frame = frame
+        super().__init__(frame)
         self.configure_ui()
 
     def configure_ui(self):
