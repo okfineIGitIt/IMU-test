@@ -9,8 +9,9 @@ from matplotlib.figure import Figure
 
 class GenericFrame(ABC):
 
-    def __init__(self, frame, *args, **kwargs):
+    def __init__(self, frame, parent_window, *args, **kwargs):
         self.frame = frame
+        self.window = parent_window
         super().__init__()
 
     def configure_ui(self):
@@ -20,8 +21,8 @@ class GenericFrame(ABC):
 class ControlFrame(GenericFrame):
     """Frame with interactive elements to control aspects of the GUI"""
 
-    def __init__(self, frame):
-        super().__init__(frame)
+    def __init__(self, frame, parent_window):
+        super().__init__(frame, parent_window)
         self.configure_ui()
 
     def configure_ui(self):
@@ -35,9 +36,8 @@ class ControlFrame(GenericFrame):
 class GraphFrame(GenericFrame):
     """Frame with graph displaying IMU readings"""
 
-    def __init__(self, frame, window):
-        super().__init__(frame)
-        self.window = window
+    def __init__(self, frame, parent_window):
+        super().__init__(frame, parent_window)
 
         # making figure with data
         self.fig = Figure(figsize=(5, 4), dpi=100)
@@ -71,8 +71,8 @@ class GraphFrame(GenericFrame):
 class RenderFrame(GenericFrame):
     """Frame with 3d render if current IMU orientation"""
 
-    def __init__(self, frame):
-        super().__init__(frame)
+    def __init__(self, frame, parent_window):
+        super().__init__(frame, parent_window)
         self.configure_ui()
 
     def configure_ui(self):
@@ -84,8 +84,8 @@ class RenderFrame(GenericFrame):
 class MonitorFrame(GenericFrame):
     """Frame with serial monitor output from IMU"""
 
-    def __init__(self, frame):
-        super().__init__(frame)
+    def __init__(self, frame, parent_window):
+        super().__init__(frame, parent_window)
         self.configure_ui()
 
     def configure_ui(self):
@@ -112,9 +112,9 @@ if __name__ == "__main__":
     window.columnconfigure(2, weight=1, minsize=75)
     window.rowconfigure(2, weight=1, minsize=50)
 
-    control = ControlFrame(frame=control_frame)
-    monitor = MonitorFrame(frame=monitor_frame)
-    render = RenderFrame(frame=render_frame)
-    graph = GraphFrame(frame=graph_frame, window=window)
+    control = ControlFrame(frame=control_frame, parent_window=window)
+    monitor = MonitorFrame(frame=monitor_frame, parent_window=window)
+    render = RenderFrame(frame=render_frame, parent_window=window)
+    graph = GraphFrame(frame=graph_frame, parent_window=window)
 
     window.mainloop()
