@@ -5,7 +5,7 @@ from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
 from matplotlib.figure import Figure
 
-from .generic_tk_frame import GenericFrame
+from src.views.generic_tk_frame import GenericFrame
 
 
 class GraphFrame(GenericFrame):

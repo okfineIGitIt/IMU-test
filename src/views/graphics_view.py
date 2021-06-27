@@ -1,6 +1,6 @@
 import tkinter as tk
 
-from .generic_tk_frame import GenericFrame
+from src.views.generic_tk_frame import GenericFrame
 
 
 class RenderFrame(GenericFrame):
