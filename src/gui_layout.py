@@ -39,25 +39,25 @@ class GraphFrame(GenericFrame):
     def __init__(self, frame, parent_window):
         super().__init__(frame, parent_window)
 
-        # making figure with data
         self.fig = Figure(figsize=(5, 4), dpi=100)
         self.ax = self.fig.add_subplot(111)
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self.frame)  # A tk.DrawingArea.
+        self.toolbar = NavigationToolbar2Tk(self.canvas, self.frame)
+
+        self.configure_ui()
+
+    def configure_ui(self):
 
         # make tkinter plot
-        self.canvas = FigureCanvasTkAgg(self.fig, master=self.frame)  # A tk.DrawingArea.
         self.canvas.draw()
         self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
-        self.toolbar = NavigationToolbar2Tk(self.canvas, self.frame)
         self.toolbar.update()
         self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
         self.canvas.mpl_connect("key_press_event", self.on_key_press)
 
         self._update_tkinter_app()
-
-    def configure_ui(self):
-        pass
 
     def on_key_press(self, event):
         print("you pressed {}".format(event.key))
