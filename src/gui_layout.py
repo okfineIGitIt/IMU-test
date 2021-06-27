@@ -1,4 +1,5 @@
 import tkinter as tk
+from abc import ABC
 
 from matplotlib.backend_bases import key_press_handler
 from matplotlib.backends.backend_tkagg import (
@@ -6,7 +7,13 @@ from matplotlib.backends.backend_tkagg import (
 from matplotlib.figure import Figure
 
 
-class ControlFrame:
+class GenericFrame(ABC):
+
+    def configure_ui(self):
+        pass
+
+
+class ControlFrame(GenericFrame):
     """Frame with interactive elements to control aspects of the GUI"""
 
     def __init__(self, frame):
@@ -21,7 +28,7 @@ class ControlFrame:
         button1.pack()
 
 
-class GraphFrame:
+class GraphFrame(GenericFrame):
     """Frame with graph displaying IMU readings"""
 
     def __init__(self, frame, window):
@@ -56,7 +63,7 @@ class GraphFrame:
         self.window.update()
 
 
-class RenderFrame:
+class RenderFrame(GenericFrame):
     """Frame with 3d render if current IMU orientation"""
 
     def __init__(self, frame):
@@ -69,7 +76,7 @@ class RenderFrame:
         canvas.pack()
 
 
-class MonitorFrame:
+class MonitorFrame(GenericFrame):
     """Frame with serial monitor output from IMU"""
 
     def __init__(self, frame):
