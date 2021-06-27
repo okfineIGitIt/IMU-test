@@ -1,9 +1,9 @@
 import tkinter as tk
 
-from views.control_view import ControlFrame
-from views.graph_view import GraphFrame
-from views.graphics_view import RenderFrame
-from views.monitor_view import MonitorFrame
+from control_view import ControlFrame
+from graph_view import GraphFrame
+from graphics_view import RenderFrame
+from monitor_view import MonitorFrame
 
 if __name__ == "__main__":
     window = tk.Tk()
