@@ -1,4 +1,5 @@
 EXPECTED_ROTATION_UNITS = ("rad/s", "deg/s")
+EXPECTED_ANGLE_UNITS = ("rad", "degrees")
 EXPECTED_ACCELERATION_UNIT = "m/s^2"
 EXPECTED_TEMP_UNIT = "degC"
 
@@ -13,6 +14,7 @@ def parse_data_string(data_string):
         parse_rotation_string_to_dict,
         parse_acceleration_string_to_dict,
         parse_temperature_string_to_dict,
+        parse_angle_string_to_dict,
     ]
 
     for parser in str_to_dict_parsers:
@@ -43,6 +45,35 @@ def parse_rotation_string_to_dict(str_to_parse):
     data_dict["units"] = unit
 
     str_to_parse = str_to_parse.strip(rot_str_ident)
+    str_to_parse = str_to_parse.strip(unit)
+    str_to_parse = str_to_parse.replace(" ", "")
+
+    coords = str_to_parse.split(",")
+    for coord in coords:
+        axis, value = coord.split(":")
+        data_dict[axis] = float(value)
+
+    return data_dict
+
+
+def parse_angle_string_to_dict(str_to_parse):
+    angle_str_ident = "Angle"
+    data_dict = {"data": angle_str_ident}
+
+    if not str_to_parse.startswith(angle_str_ident):
+        return
+
+    unit = None
+    for unit_str in EXPECTED_ANGLE_UNITS:
+        if unit_str in str_to_parse:
+            unit = unit_str
+
+    if unit is None:
+        print("Units not provided in angle string!")
+
+    data_dict["units"] = unit
+
+    str_to_parse = str_to_parse.strip(angle_str_ident)
     str_to_parse = str_to_parse.strip(unit)
     str_to_parse = str_to_parse.replace(" ", "")
 

@@ -132,14 +132,15 @@ void loop() {
   Serial.print(a.acceleration.y);
   Serial.print(", Z: ");
   Serial.print(a.acceleration.z);
-  Serial.print(" m/s^2");
+  Serial.println(" m/s^2");
 
-  Serial.print("x angle: ");
+  Serial.print("Angle X: ");
   Serial.print(x_angle);
-  Serial.print("  y angle: ");
+  Serial.print(", Y: ");
   Serial.print(y_angle);
-  Serial.print("  z angle: ");
-  Serial.println(z_angle);
+  Serial.print(", Z: ");
+  Serial.print(z_angle);
+  Serial.println(" degrees");
   
   
 
