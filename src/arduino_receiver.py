@@ -2,7 +2,6 @@ import time
 
 import serial
 
-from data_plotting import IMUPlot
 from utils import data_format_conversions as dfc
 
 ARDUINO_COM_PORT = "COM3"
@@ -29,24 +28,16 @@ def flush_io_buffers(serial_conn: serial.Serial):
     print("flushed")
 
 
-if __name__ == "__main__":
-    ser = serial.Serial(ARDUINO_COM_PORT, baudrate=BAUD_RATE, dsrdtr=False)
-    imu_plot = IMUPlot()
+def read_port_data(serial_obj):
+    response = serial_obj.read_until()
+    response_str = response.decode("utf-8").rstrip("\n")
+    response_str = response_str.strip("\r")
+    # print(f"response_str: {response_str}")
 
-    i = 0
-    while True:
-        response = ser.read_until()
-        response_str = response.decode("utf-8").rstrip("\n")
-        response_str = response_str.strip("\r")
-        print(f"response_str: {response_str}")
-
-        rot_data = dfc.parse_rotation_string_to_dict(response_str)
-
-        if rot_data is None:
-            continue
-
-        rot_x = rot_data["X"]
-        imu_plot.add_data_point(i, rot_x)
-        i = i + 1
+    return dfc.parse_angle_string_to_dict(response_str)
 
 
+def get_arduino_serial_connection(
+    com_port=ARDUINO_COM_PORT, arduino_baudrate=BAUD_RATE
+):
+    return serial.Serial(com_port, baudrate=arduino_baudrate, dsrdtr=False)
