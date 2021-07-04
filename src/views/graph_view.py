@@ -1,8 +1,7 @@
 import tkinter as tk
 
 from matplotlib.backend_bases import key_press_handler
-from matplotlib.backends.backend_tkagg import (
-    FigureCanvasTkAgg, NavigationToolbar2Tk)
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from matplotlib.figure import Figure
 
 from src.views.generic_tk_frame import GenericFrame
@@ -16,7 +15,9 @@ class GraphFrame(GenericFrame):
 
         self.fig = Figure(figsize=(5, 4), dpi=100)
         self.ax = self.fig.add_subplot(111)
-        self.canvas = FigureCanvasTkAgg(self.fig, master=self.frame)  # A tk.DrawingArea.
+        self.canvas = FigureCanvasTkAgg(
+            self.fig, master=self.frame
+        )  # A tk.DrawingArea.
         self.toolbar = NavigationToolbar2Tk(self.canvas, self.frame)
 
         self.configure_ui()
@@ -41,4 +42,3 @@ class GraphFrame(GenericFrame):
     def _update_tkinter_app(self):
         self.window.update_idletasks()
         self.window.update()
-
