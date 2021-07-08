@@ -1,15 +1,17 @@
 """Display main GUI and run application"""
 import tkinter as tk
 
-from arduino_receiver import read_port_data, get_arduino_serial_connection
 from src.controllers.graphics_controller import GraphicsController
+from src.models.monitor_model import ArduinoConnection
+from src.utils import data_format_conversions as dfc
 
 
 def update_graphics_with_arduino_data(controller):
-    ser = get_arduino_serial_connection()
+    arduino_conn_obj = ArduinoConnection()
 
     while True:
-        data = read_port_data(ser)
+        response_string = arduino_conn_obj.read_port_data()
+        data = dfc.parse_angle_string_to_dict(response_string)
 
         if data is None:
             continue
