@@ -18,15 +18,35 @@ class RenderFrame(GenericFrame):
         self.canvas = tk.Canvas(self.frame)
         self.canvas.pack()
 
-    def draw_line(self, line_name: str, coords):
+    def draw_line(self, line_name: str, coords, color: str = "black"):
+        """Draw line on Canvas
+
+        :param line_name: Name that can be used to update the line coordinates
+        :param coords:
+        :param color: can be a color name for standard colors, or a hex string
+        :return:
+        """
         x, y, _ = coords
-        self.canvas.create_line(0, 0, X_ORIGIN, Y_ORIGIN, width=3, tags=line_name)
+        self.canvas.create_line(
+            X_ORIGIN,
+            Y_ORIGIN,
+            X_ORIGIN + x,
+            Y_ORIGIN + y,
+            width=3,
+            tags=line_name,
+            fill=color,
+        )
         self.window.update_idletasks()
 
     def update_line(self, line_name: str, coords):
+        """Update the coordinates of an existing line on the Canvas
+
+        :param line_name:
+        :param coords:
+        :return:
+        """
         x, y, _ = coords
-        self.canvas.coords(line_name, X_ORIGIN, Y_ORIGIN, x, y)
-        # print(f"update_line: z coords: {coords}")
+        self.canvas.coords(line_name, X_ORIGIN, Y_ORIGIN, X_ORIGIN + x, Y_ORIGIN + y)
         self.window.update_idletasks()
 
 
