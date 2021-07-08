@@ -1,10 +1,11 @@
 import numpy as np
 
 from src.math_constants import (
-    AngleUnits, Axis,
+    AngleUnits,
+    Axis,
     get_x_axis_rotation_matrix,
     get_y_axis_rotation_matrix,
-    get_z_axis_rotation_matrix
+    get_z_axis_rotation_matrix,
 )
 
 
