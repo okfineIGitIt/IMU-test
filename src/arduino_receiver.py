@@ -40,4 +40,9 @@ def read_port_data(serial_obj):
 def get_arduino_serial_connection(
     com_port=ARDUINO_COM_PORT, arduino_baudrate=BAUD_RATE
 ):
-    return serial.Serial(com_port, baudrate=arduino_baudrate, dsrdtr=False)
+    try:
+        return serial.Serial(com_port, baudrate=arduino_baudrate, dsrdtr=False)
+    except serial.SerialException as se:
+        print(f"Could not get serial connection\n{se}")
+
+    return
