@@ -4,6 +4,7 @@ import tkinter as tk
 from src.controllers.graphics_controller import GraphicsController
 from src.models.monitor_model import ArduinoConnection
 from src.utils import data_format_conversions as dfc
+from src.views.monitor_view import MonitorFrame
 
 
 def update_graphics_with_arduino_data(controller):
@@ -32,7 +33,11 @@ if __name__ == "__main__":
     render_frame = tk.Frame(master=window, relief=tk.RAISED, borderwidth=1)
     render_frame.grid(row=1, column=1)
 
+    monitor_frame = tk.Frame(master=window, relief=tk.RAISED, borderwidth=1)
+    monitor_frame.grid(row=1, column=2)
+
     graphics_controller = GraphicsController(render_frame, window)
+    monitor = MonitorFrame(monitor_frame, window)
 
     # arduino_ser = get_arduino_serial_connection()
     window.after(3000, lambda: update_graphics_with_arduino_data(graphics_controller))
