@@ -67,6 +67,10 @@ class ArduinoConnection:
         print("flushed")
 
     def read_port_data(self):
+        """Read data from the com port
+
+        Currently only data from COM3 is read
+        """
         if self.arduino_is_connected is False:
             raise ArduinoNotConnectedError(
                 f"read_port_data() only works when the Arduino is connected!"
