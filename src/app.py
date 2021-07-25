@@ -1,8 +1,10 @@
 """Display main GUI and run application"""
 import tkinter as tk
+from threading import Thread
 
 from arduino_receiver import read_port_data, get_arduino_serial_connection
 from src.controllers.graphics_controller import GraphicsController
+from src.controllers.monitor_controller import MonitorController
 
 
 def update_graphics_with_arduino_data(controller):
@@ -19,6 +21,14 @@ def update_graphics_with_arduino_data(controller):
         controller.update_z_line(data["X"], data["Y"], data["Z"])
 
 
+def run_graphics_thread(controller):
+    graphics_thread = Thread(
+        target=update_graphics_with_arduino_data, args=(controller,), daemon=True
+    )
+
+    graphics_thread.start()
+
+
 def run():
     window = tk.Tk()
 
@@ -30,8 +40,12 @@ def run():
     render_frame = tk.Frame(master=window, relief=tk.RAISED, borderwidth=1)
     render_frame.grid(row=1, column=1)
 
+    monitor_frame = tk.Frame(master=window, relief=tk.RAISED, borderwidth=1)
+    monitor_frame.grid(row=1, column=2)
+
     graphics_controller = GraphicsController(render_frame, window)
+    monitor_controller = MonitorController(monitor_frame, window)
 
     # arduino_ser = get_arduino_serial_connection()
-    window.after(3000, lambda: update_graphics_with_arduino_data(graphics_controller))
+    # window.after(500, lambda: run_graphics_thread(graphics_controller))
     window.mainloop()
