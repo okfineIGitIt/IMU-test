@@ -1,29 +1,44 @@
 """Display main GUI and run application"""
 import tkinter as tk
-from threading import Thread
+from threading import Thread, Event
 
-from arduino_receiver import read_port_data, get_arduino_serial_connection
 from src.controllers.graphics_controller import GraphicsController
 from src.controllers.monitor_controller import MonitorController
+from src.utils.data_format_conversions import parse_data_string
+
+kill_conn_thread = Event()
 
 
-def update_graphics_with_arduino_data(controller):
-    ser = get_arduino_serial_connection()
+def update_graphics_with_arduino_data(graphics_controller, monitor_controller):
+    if not monitor_controller.arduino_conn.arduino_is_connected:
+        monitor_controller.arduino_conn.create_arduino_serial_connection()
 
-    while True:
-        data = read_port_data(ser)
+    while not kill_conn_thread.is_set():
+        data_string = monitor_controller.arduino_conn.read_port_data()
+
+        if data_string is None:
+            continue
+
+        monitor_controller.monitor_view.print_to_monitor(data_string)
+
+        data = parse_data_string(data_string)
 
         if data is None:
             continue
 
-        controller.update_x_line(data["X"], data["Y"], data["Z"])
-        controller.update_y_line(data["X"], data["Y"], data["Z"])
-        controller.update_z_line(data["X"], data["Y"], data["Z"])
+        graphics_controller.update_x_line(data["X"], data["Y"], data["Z"])
+        graphics_controller.update_y_line(data["X"], data["Y"], data["Z"])
+        graphics_controller.update_z_line(data["X"], data["Y"], data["Z"])
+
+    kill_conn_thread.clear()
 
 
-def run_graphics_thread(controller):
+def run_graphics_thread(graphics_controller, monitor_controller):
     graphics_thread = Thread(
-        target=update_graphics_with_arduino_data, args=(controller,), daemon=True
+        target=update_graphics_with_arduino_data, args=(
+            graphics_controller, monitor_controller
+        ),
+        daemon=True
     )
 
     graphics_thread.start()
@@ -43,8 +58,23 @@ def run():
     monitor_frame = tk.Frame(master=window, relief=tk.RAISED, borderwidth=1)
     monitor_frame.grid(row=1, column=2)
 
+    control_frame = tk.Frame(master=window, relief=tk.RAISED, borderwidth=1)
+    control_frame.grid(row=2, column=2)
+
     graphics_controller = GraphicsController(render_frame, window)
     monitor_controller = MonitorController(monitor_frame, window)
+
+    start_button = tk.Button(
+        control_frame, text="START",
+        command=lambda: run_graphics_thread(graphics_controller, monitor_controller)
+    )
+    stop_button = tk.Button(
+        control_frame, text="STOP",
+        command=kill_conn_thread.set
+    )
+
+    start_button.pack()
+    stop_button.pack()
 
     # arduino_ser = get_arduino_serial_connection()
     # window.after(500, lambda: run_graphics_thread(graphics_controller))
