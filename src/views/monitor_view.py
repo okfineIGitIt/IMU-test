@@ -28,9 +28,6 @@ class MonitorFrame(GenericFrame):
         self.elements["btns"]["disconnect"].pack()
         self.elements["btns"]["flush_editor"].pack()
 
-        monitor = self.elements["text_edts"]["monitor"]
-        monitor["state"] = tk.DISABLED
-
     def print_to_monitor(self, text: str, add_newline: bool = True):
         """Print text to the text editor
 
@@ -38,9 +35,14 @@ class MonitorFrame(GenericFrame):
         :param add_newline: if True, a newline is added to the end of the text string
         :return:
         """
-        monitor = self.elements["text_edts"]["monitor"]
 
         if add_newline:
             text = text + "\n"
 
-        monitor.insert(tk.END, text)
+        self.elements["text_edts"]["monitor"].insert(tk.END, text)
+        self.window.update_idletasks()
+
+    def clear_monitor(self):
+        """Clear all text from the monitor"""
+        self.elements["text_edts"]["monitor"].delete("1.0", tk.END)
+        self.window.update_idletasks()
