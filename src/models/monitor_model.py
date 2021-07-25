@@ -49,7 +49,7 @@ class ArduinoConnection:
         """Flush the input and output buffers of a serial connection."""
         if self.arduino_is_connected is False:
             raise ArduinoNotConnectedError(
-                f"read_port_data() only works when the Arduino is connected!"
+                "read_port_data() only works when the Arduino is connected!"
             )
 
         print("Flushing buffers...")
@@ -72,7 +72,7 @@ class ArduinoConnection:
         """
         if self.arduino_is_connected is False:
             raise ArduinoNotConnectedError(
-                f"read_port_data() only works when the Arduino is connected!"
+                "read_port_data() only works when the Arduino is connected!"
             )
 
         response = self._serial_conn.read_until()
