@@ -16,7 +16,6 @@ class ArduinoConnection:
 
     def __init__(self):
         self._serial_conn = None
-        self.create_arduino_serial_connection()
 
     @property
     def arduino_is_connected(self):
