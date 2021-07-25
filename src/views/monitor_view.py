@@ -40,6 +40,7 @@ class MonitorFrame(GenericFrame):
             text = text + "\n"
 
         self.elements["text_edts"]["monitor"].insert(tk.END, text)
+        self.elements["text_edts"]["monitor"].see(tk.END)
         self.window.update_idletasks()
 
     def clear_monitor(self):
