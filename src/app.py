@@ -26,9 +26,7 @@ def update_graphics_with_arduino_data(graphics_controller, monitor_controller):
         if data is None:
             continue
 
-        graphics_controller.update_x_line(data["X"], data["Y"], data["Z"])
-        graphics_controller.update_y_line(data["X"], data["Y"], data["Z"])
-        graphics_controller.update_z_line(data["X"], data["Y"], data["Z"])
+        graphics_controller.update_all_lines(data["X"], data["Y"], data["Z"])
 
     kill_conn_thread.clear()
 

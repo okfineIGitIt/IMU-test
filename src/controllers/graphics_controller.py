@@ -21,9 +21,9 @@ class GraphicsController:
     def update_x_line(self, x_angle, y_angle, z_angle):
         """Update line along the x-axis of the IMU
 
-        :param x_angle:
-        :param y_angle:
-        :param z_angle:
+        :param x_angle: Angle IMU is rotated around the x-axis
+        :param y_angle: Angle IMU is rotated around the y-axis
+        :param z_angle: Angle IMU is rotated around the z-axis
         :return:
         """
         self.imu_lines_model.rotate_x_line(x_angle, y_angle, z_angle)
@@ -32,9 +32,9 @@ class GraphicsController:
     def update_y_line(self, x_angle, y_angle, z_angle):
         """Update line along the y-axis of the IMU
 
-        :param x_angle:
-        :param y_angle:
-        :param z_angle:
+        :param x_angle: Angle IMU is rotated around the x-axis
+        :param y_angle: Angle IMU is rotated around the y-axis
+        :param z_angle: Angle IMU is rotated around the z-axis
         :return:
         """
         self.imu_lines_model.rotate_y_line(x_angle, y_angle, z_angle)
@@ -43,10 +43,23 @@ class GraphicsController:
     def update_z_line(self, x_angle, y_angle, z_angle):
         """Update line along the z-axis of the IMU
 
-        :param x_angle:
-        :param y_angle:
-        :param z_angle:
+        :param x_angle: Angle IMU is rotated around the x-axis
+        :param y_angle: Angle IMU is rotated around the y-axis
+        :param z_angle: Angle IMU is rotated around the z-axis
         :return:
         """
         self.imu_lines_model.rotate_z_line(x_angle, y_angle, z_angle)
         self.graphics_view.update_line("z_line", self.imu_lines_model.z_line_coords)
+
+    def update_all_lines(self, x_angle, y_angle, z_angle):
+        """Update all lines in the IMU graphic.
+
+        :param x_angle: Angle IMU is rotated around the x-axis
+        :param y_angle: Angle IMU is rotated around the y-axis
+        :param z_angle: Angle IMU is rotated around the z-axis
+        :return:
+        """
+        self.update_x_line(x_angle, y_angle, z_angle)
+        self.update_y_line(x_angle, y_angle, z_angle)
+        self.update_z_line(x_angle, y_angle, z_angle)
+
