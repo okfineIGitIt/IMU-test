@@ -19,6 +19,8 @@ class GraphFrame(GenericFrame):
             self.fig, master=self.frame
         )  # A tk.DrawingArea.
         self.toolbar = NavigationToolbar2Tk(self.canvas, self.frame)
+        self.save_button = tk.Button(self.frame, text="Save Data")
+        self.save_button.pack()
 
         self.coord_data = {}
 
