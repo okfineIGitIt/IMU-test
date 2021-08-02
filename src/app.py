@@ -1,7 +1,9 @@
 """Display main GUI and run application"""
+import time
 import tkinter as tk
 from threading import Thread, Event
 
+from src.controllers.graph_controller import GraphController
 from src.controllers.graphics_controller import GraphicsController
 from src.controllers.monitor_controller import MonitorController
 from src.utils.data_format_conversions import parse_data_string
@@ -9,7 +11,9 @@ from src.utils.data_format_conversions import parse_data_string
 kill_conn_thread = Event()
 
 
-def update_graphics_with_arduino_data(graphics_controller, monitor_controller):
+def update_graphics_with_arduino_data(
+        graphics_controller, monitor_controller, graph_controller
+):
     if not monitor_controller.arduino_conn.arduino_is_connected:
         monitor_controller.arduino_conn.create_arduino_serial_connection()
 
@@ -27,14 +31,15 @@ def update_graphics_with_arduino_data(graphics_controller, monitor_controller):
             continue
 
         graphics_controller.update_all_lines(data["X"], data["Y"], data["Z"])
+        graph_controller.add_data_point(time.perf_counter(), data["X"], "x_data")
 
     kill_conn_thread.clear()
 
 
-def run_graphics_thread(graphics_controller, monitor_controller):
+def run_graphics_thread(graphics_controller, monitor_controller, graph_controller):
     graphics_thread = Thread(
         target=update_graphics_with_arduino_data, args=(
-            graphics_controller, monitor_controller
+            graphics_controller, monitor_controller, graph_controller
         ),
         daemon=True
     )
@@ -57,14 +62,20 @@ def run():
     monitor_frame.grid(row=1, column=2)
 
     control_frame = tk.Frame(master=window, relief=tk.RAISED, borderwidth=1)
-    control_frame.grid(row=2, column=2)
+    control_frame.grid(row=2, column=1)
+
+    graph_frame = tk.Frame(master=window, relief=tk.RAISED, borderwidth=1)
+    graph_frame.grid(row=2, column=2)
 
     graphics_controller = GraphicsController(render_frame, window)
     monitor_controller = MonitorController(monitor_frame, window)
+    graph_controller = GraphController(graph_frame, window)
 
     start_button = tk.Button(
         control_frame, text="START",
-        command=lambda: run_graphics_thread(graphics_controller, monitor_controller)
+        command=lambda: run_graphics_thread(
+            graphics_controller, monitor_controller, graph_controller
+        )
     )
     stop_button = tk.Button(
         control_frame, text="STOP",
