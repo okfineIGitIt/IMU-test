@@ -39,6 +39,20 @@ class GraphFrame(GenericFrame):
         print("you pressed {}".format(event.key))
         key_press_handler(event, self.canvas, self.toolbar)
 
+    def add_data_point_to_plot(self, x, y, line: str):
+        """Add data point to plot line.
+
+        :param x: x-coordinate for point to plot
+        :param y: y-coordinate for point to plot
+        :param line: line group to add point to
+        :return:
+        """
+        pass
+
+    def clear_plot(self):
+        """Clear all plot data"""
+        pass
+
     def _update_tkinter_app(self):
         self.window.update_idletasks()
         self.window.update()
