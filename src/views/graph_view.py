@@ -20,6 +20,8 @@ class GraphFrame(GenericFrame):
         )  # A tk.DrawingArea.
         self.toolbar = NavigationToolbar2Tk(self.canvas, self.frame)
 
+        self.coord_data = {}
+
         self.configure_ui()
 
     def configure_ui(self):
@@ -47,11 +49,29 @@ class GraphFrame(GenericFrame):
         :param line: line group to add point to
         :return:
         """
-        pass
+
+        self.ax.clear()
+
+        # if line does not exist create it
+        if line not in self.coord_data.keys():
+            self.coord_data[line] = {
+                "x": [],
+                "y": [],
+            }
+
+        self.coord_data[line]["x"].append(x)
+        self.coord_data[line]["y"].append(y)
+
+        self.ax.plot(self.coord_data[line]["x"], self.coord_data[line]["y"])
+        self.canvas.draw()
+
+        self._update_tkinter_app()
 
     def clear_plot(self):
         """Clear all plot data"""
-        pass
+        self.ax.clear()
+        self.coord_data = {}
+        self._update_tkinter_app()
 
     def _update_tkinter_app(self):
         self.window.update_idletasks()
